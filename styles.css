@@ -778,6 +778,11 @@ a {
   border-top: 2px dashed var(--secondary-dark);
 }
 
+.faq-answer p {
+  text-wrap: balance;
+  text-align: left;
+}
+
 .faq-item.active .faq-answer {
   padding: 1.5rem;
   max-height: 800px;
