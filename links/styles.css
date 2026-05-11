@@ -1,0 +1,301 @@
+:root {
+    --bg-color: #F7E8CB;       /* Light beige background */
+    --text-color: #014760;     /* PetHero Dark Blue */
+    --accent-color: #FD1024;   /* PetHero Red */
+    --card-bg: #fffaf0;        /* White card background */
+    --hover-bg: #FD1024;       /* Red background on hover */
+    --hover-text: #ffffff;     /* White text on hover */
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Outfit', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    overflow-x: hidden;
+}
+
+.background-pattern {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    background-image: radial-gradient(rgba(1, 71, 96, 0.08) 2px, transparent 2px);
+    background-size: 24px 24px;
+    z-index: -2;
+}
+
+@keyframes blob-float {
+    0% { transform: translate(0, 0) scale(1) rotate(0deg); border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; }
+    50% { transform: translate(30px, -50px) scale(1.05) rotate(15deg); border-radius: 60% 40% 30% 70% / 50% 60% 40% 50%; }
+    100% { transform: translate(-20px, 20px) scale(0.95) rotate(-10deg); border-radius: 50% 50% 60% 40% / 40% 60% 50% 50%; }
+}
+
+.container {
+    width: 100%;
+    max-width: 480px;
+    padding: 3rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+    animation: fadeInDown 0.8s ease-out forwards;
+}
+
+.brand-motto {
+    font-size: 0.95rem;
+    font-weight: 800;
+    color: var(--text-color);
+    margin-bottom: 0.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+}
+
+.brand-motto i {
+    color: var(--accent-color);
+    font-size: 1rem;
+}
+
+.logo-container img {
+    max-width: 180px;
+    height: auto;
+    margin-bottom: 1.5rem;
+}
+
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+}
+
+.comic-badge {
+    display: inline-block;
+    padding: 0.5rem 1.5rem;
+    background-color: var(--accent-color);
+    color: #ffffff;
+    border: 2px solid #8c000c;
+    border-radius: 8px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+    box-shadow: 3px 3px 0px var(--text-color);
+    transform: rotate(-2deg);
+}
+
+.hero-text {
+    font-size: 3rem;
+    font-weight: 800;
+    color: var(--text-color);
+    margin-bottom: 0.5rem;
+    line-height: 1.2;
+    letter-spacing: -0.5px;
+}
+
+.subtitle {
+    font-size: 1.1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: var(--text-color);
+    opacity: 0.9;
+}
+
+.highlight {
+    position: relative;
+    font-weight: 700;
+    display: inline-block;
+    z-index: 1;
+    color: #FD1024;
+}
+
+.highlight::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 6px;
+    bottom: 2px; left: 0;
+    background-color: rgba(223, 58, 54, 0.2);
+    border-radius: 4px;
+    z-index: -1;
+}
+
+.links-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 3rem;
+}
+
+.link-card {
+    text-decoration: none;
+    background-color: var(--card-bg);
+    color: var(--text-color);
+    padding: 1.2rem 1.5rem;
+    border-radius: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 12px rgba(1, 71, 96, 0.05);
+    position: relative;
+    overflow: hidden;
+    transition: box-shadow 0.3s ease, color 0.3s ease;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.link-card:nth-child(1) { animation-delay: 0.1s; }
+.link-card:nth-child(2) { animation-delay: 0.2s; }
+.link-card:nth-child(3) { animation-delay: 0.3s; }
+.link-card:nth-child(4) { animation-delay: 0.4s; }
+
+.link-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--hover-bg);
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 0;
+}
+
+.link-card:hover {
+    color: var(--hover-text);
+    box-shadow: 0 8px 24px rgba(223, 58, 54, 0.2);
+}
+
+.link-card:hover::before {
+    transform: scaleX(1);
+    transform-origin: left;
+}
+
+.link-content {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    position: relative;
+    z-index: 1;
+}
+
+.icon-wrapper {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background-color: rgba(1, 71, 96, 0.05);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.25rem;
+    color: var(--text-color);
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s ease, color 0.3s ease;
+}
+
+.link-card:hover .icon-wrapper {
+    transform: rotate(5deg) scale(1.1);
+    background-color: rgba(255, 255, 255, 0.2);
+    color: var(--hover-text);
+}
+
+.link-content span {
+    font-weight: 600;
+    font-size: 1.1rem;
+    letter-spacing: 0.3px;
+}
+
+.link-arrow {
+    position: relative;
+    z-index: 1;
+    opacity: 0.6;
+    font-size: 1.1rem;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.link-card:hover .link-arrow {
+    transform: translateX(6px);
+    opacity: 1;
+}
+
+footer {
+    text-align: center;
+    opacity: 0;
+    animation: fadeIn 0.8s ease-out 0.8s forwards;
+}
+
+footer p {
+    font-size: 0.875rem;
+    color: var(--text-color);
+    opacity: 0.7;
+    font-weight: 400;
+}
+
+/* Animations */
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Ripple Effect */
+.ripple {
+    position: absolute;
+    border-radius: 50%;
+    transform: scale(0);
+    animation: ripple-animation 0.6s linear;
+    background-color: rgba(255, 255, 255, 0.4);
+    pointer-events: none;
+    z-index: 0;
+}
+
+@keyframes ripple-animation {
+    to {
+        transform: scale(4);
+        opacity: 0;
+    }
+}
