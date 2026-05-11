@@ -158,15 +158,40 @@ a {
 }
 
 .image-grid-3 {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.5rem;
+}
+
+.image-grid-3 > * {
+  flex: 0 1 calc(33.333% - 1.5rem);
+  min-width: 300px;
+}
+
+.image-grid-4 {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: repeat(4, 1fr);
   gap: 1rem;
 }
 
+@media (max-width: 1200px) {
+  .image-grid-4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.image-grid-4 .comic-img {
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+}
+
 @media (max-width: 768px) {
-  .image-grid-3 {
-    grid-template-columns: 1fr;
-    grid-template-rows: 1fr 1fr 1fr;
+  .image-grid-3 > * {
+    flex: 0 1 100%;
+  }
+  .image-grid-4 {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
@@ -330,7 +355,9 @@ a {
 
 .nav-links {
   display: flex;
-  gap: 1.5rem;
+  width: 100%;
+  gap: 1rem;
+  justify-content: flex-end;
   align-items: center;
 }
 
@@ -338,7 +365,7 @@ a {
   font-family: var(--font-heading);
   font-weight: 700;
   color: var(--secondary-dark);
-  font-size: 0.95rem;
+  font-size: 0.85rem;
   text-transform: uppercase;
   position: relative;
 }
@@ -372,7 +399,20 @@ a {
   width: 25px;
   height: 3px;
   background-color: var(--secondary-dark);
-  transition: 0.3s;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-origin: center;
+}
+
+.menu-toggle.open span:nth-child(1) {
+  transform: translateY(8px) rotate(45deg);
+}
+
+.menu-toggle.open span:nth-child(2) {
+  opacity: 0;
+}
+
+.menu-toggle.open span:nth-child(3) {
+  transform: translateY(-8px) rotate(-45deg);
 }
 
 .mobile-menu {
@@ -497,7 +537,7 @@ a {
 /* General Flex/Grid Layouts */
 .split-section {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1.4fr 1fr;
   gap: 4rem;
   align-items: center;
 }
@@ -554,12 +594,43 @@ a {
 .creche .comic-badge {
   background-color: #00D28E;
   color: var(--secondary-dark);
+  border-color: #00D28E;
 }
 
 .hotel .comic-badge {
   background-color: #6C5CE7;
   color: var(--white);
   border-color: #4a3eb3;
+}
+
+.adestramento .comic-badge {
+  background-color: #e7d25c;
+  color: var(--white);
+  border-color: #b3a141;
+}
+
+.veterinario .comic-badge {
+  background-color: #1abc9c;
+  color: var(--white);
+  border-color: #16a085;
+}
+
+.cafeteria .comic-badge {
+  background-color: #e67e22;
+  color: var(--white);
+  border-color: #d35400;
+}
+
+.acessorios .comic-badge {
+  background-color: #f368e0;
+  color: var(--white);
+  border-color: #ef52de;
+}
+
+.eventos .comic-badge {
+  background-color: #2658fd;
+  color: var(--white);
+  border-color: #2658fd;
 }
 
 .check-list {
@@ -594,6 +665,7 @@ a {
 .snacks-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
+  max-width: 1000px;
   gap: 3rem;
   margin-top: 3rem;
 }
@@ -679,7 +751,7 @@ a {
   justify-content: space-between;
   align-items: center;
   background: var(--white);
-  transition: background 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 .faq-question:hover {
@@ -704,6 +776,11 @@ a {
   transition: max-height 0.4s ease, padding 0.4s ease;
   background: var(--primary-light);
   border-top: 2px dashed var(--secondary-dark);
+}
+
+.faq-answer p {
+  text-wrap: balance;
+  text-align: left;
 }
 
 .faq-item.active .faq-answer {
@@ -802,8 +879,133 @@ a {
   transform: translate(0);
 }
 
+/* Heroic Carousel */
+.carousel-container {
+  position: relative;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto 0rem auto;
+  padding: 0rem 0;
+}
+
+.carousel-viewport {
+  position: relative;
+  width: 100%;
+  height: 500px; /* Enough height for the largest image */
+  overflow: hidden;
+}
+
+.carousel-track {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.carousel-slide {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 55%;
+  max-width: 800px;
+  transform: translate(-50%, -50%) scale(0.6);
+  opacity: 0;
+  transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.6s ease;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.carousel-slide.active {
+  transform: translate(-50%, -50%) scale(1);
+  opacity: 1;
+  z-index: 3;
+  pointer-events: auto;
+  cursor: default;
+}
+
+.carousel-slide.prev-slide {
+  transform: translate(-105%, -50%) scale(0.8);
+  opacity: 0.5;
+  z-index: 2;
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+.carousel-slide.next-slide {
+  transform: translate(5%, -50%) scale(0.8);
+  opacity: 0.5;
+  z-index: 2;
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+.carousel-slide img {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  display: block;
+}
+
+.carousel-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--white);
+  border: var(--border-comic);
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  box-shadow: var(--shadow-comic);
+  transition: var(--transition-bounce);
+  color: var(--secondary-dark);
+}
+
+.carousel-btn:hover {
+  transform: translateY(-50%) translate(-2px, -2px);
+  box-shadow: var(--shadow-comic-hover);
+  background: var(--primary-bg);
+}
+
+.carousel-btn:active {
+  transform: translateY(-50%) translate(0, 0);
+  box-shadow: 2px 2px 0px var(--secondary-dark);
+}
+
+.carousel-btn.prev {
+  left: 20px;
+}
+
+.carousel-btn.next {
+  right: 20px;
+}
+
+@media (max-width: 768px) {
+  .carousel-viewport {
+    height: 300px;
+  }
+  .carousel-slide {
+    width: 65%;
+  }
+  .carousel-slide.prev-slide {
+    transform: translate(-95%, -50%) scale(0.85); /* Slightly less translated on mobile to keep in frame */
+  }
+  .carousel-slide.next-slide {
+    transform: translate(-5%, -50%) scale(0.85);
+  }
+  .carousel-btn {
+    width: 40px;
+    height: 40px;
+  }
+  .carousel-btn.prev { left: 10px; }
+  .carousel-btn.next { right: 10px; }
+}
+
 /* Responsive Design */
-@media (max-width: 992px) {
+@media (max-width: 1200px) {
 
   .split-section,
   .hero-container {
@@ -835,7 +1037,7 @@ a {
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1200px) {
 
   .nav-links,
   .nav-cta {
@@ -852,6 +1054,9 @@ a {
 
   .snacks-grid {
     grid-template-columns: 1fr;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
   }
 
   .hero {

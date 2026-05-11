@@ -15,27 +15,16 @@ document.addEventListener('DOMContentLoaded', () => {
   const mobileLinks = mobileMenu.querySelectorAll('a');
 
   menuToggle.addEventListener('click', () => {
-    mobileMenu.classList.toggle('active');
-    menuToggle.classList.toggle('open');
-    const spans = menuToggle.querySelectorAll('span');
-    if (mobileMenu.classList.contains('active')) {
-      spans[0].style.transform = 'rotate(45deg) translate(5px, 5px)';
-      spans[1].style.opacity = '0';
-      spans[2].style.transform = 'rotate(-45deg) translate(5px, -5px)';
-    } else {
-      spans[0].style.transform = 'none';
-      spans[1].style.opacity = '1';
-      spans[2].style.transform = 'none';
-    }
+    const isOpen = menuToggle.classList.toggle('open');
+    mobileMenu.classList.toggle('active', isOpen);
+    menuToggle.setAttribute('aria-label', isOpen ? 'Fechar menu' : 'Abrir menu');
   });
 
   mobileLinks.forEach(link => {
     link.addEventListener('click', () => {
       mobileMenu.classList.remove('active');
-      const spans = menuToggle.querySelectorAll('span');
-      spans[0].style.transform = 'none';
-      spans[1].style.opacity = '1';
-      spans[2].style.transform = 'none';
+      menuToggle.classList.remove('open');
+      menuToggle.setAttribute('aria-label', 'Abrir menu');
     });
   });
 
@@ -71,7 +60,60 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   }, observerOptions);
-
+  // Intersection Observer Observation
   const animatedElements = document.querySelectorAll('.fade-in-up, .fade-in-left, .fade-in-right');
   animatedElements.forEach(el => observer.observe(el));
+
+  // 5. Infinite Heroic Carousel
+  const track = document.querySelector('.carousel-track');
+  const slides = Array.from(track.children);
+  const nextBtn = document.querySelector('.carousel-btn.next');
+  const prevBtn = document.querySelector('.carousel-btn.prev');
+  let currentIndex = 0;
+
+  // Improved updateCarousel with classes for position
+  function moveCarousel(direction) {
+    if (direction === 'next') {
+      currentIndex = (currentIndex + 1) % slides.length;
+    } else {
+      currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+    }
+    renderCarousel();
+  }
+
+  function renderCarousel() {
+    if (!track) return;
+    const total = slides.length;
+
+    slides.forEach((slide, index) => {
+      slide.classList.remove('active', 'prev-slide', 'next-slide', 'hidden-slide');
+
+      if (index === currentIndex) {
+        slide.classList.add('active');
+      } else if (index === (currentIndex - 1 + total) % total) {
+        slide.classList.add('prev-slide');
+      } else if (index === (currentIndex + 1) % total) {
+        slide.classList.add('next-slide');
+      } else {
+        slide.classList.add('hidden-slide');
+      }
+    });
+  }
+
+  if (nextBtn && prevBtn) {
+    nextBtn.addEventListener('click', () => moveCarousel('next'));
+    prevBtn.addEventListener('click', () => moveCarousel('prev'));
+  }
+
+  slides.forEach((slide, index) => {
+    slide.addEventListener('click', () => {
+      // Allow clicking on side slides
+      if (slide.classList.contains('prev-slide')) {
+        moveCarousel('prev');
+      } else if (slide.classList.contains('next-slide')) {
+        moveCarousel('next');
+      }
+    });
+  });
+  renderCarousel();
 });
